@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('size');
             $table->unsignedBigInteger('farmer_id');
             $table->foreign("farmer_id")
-            ->references("id")
-            ->on("farmers")
-            ->onDelete('cascade');
+                ->references("id")
+                ->on("farmers")
+                ->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

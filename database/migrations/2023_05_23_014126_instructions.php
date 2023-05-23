@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('drone_id');
             $table->foreign("drone_id")
-            ->references("id")
-            ->on("drones")
-            ->onDelete('cascade');
+                ->references("id")
+                ->on("drones")
+                ->onDelete('cascade');
             $table->unsignedBigInteger('plan_id');
             $table->foreign("plan_id")
-            ->references("id")
-            ->on("plans")
-            ->onDelete('cascade');
+                ->references("id")
+                ->on("plans")
+                ->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

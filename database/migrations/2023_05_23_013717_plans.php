@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->string('date_time');
+            $table->dateTime('date_time');
             $table->string('area');
             $table->string('altitude');
             $table->unsignedBigInteger('farmer_id');
             $table->foreign("farmer_id")
-            ->references("id")
-            ->on("farmers")
-            ->onDelete('cascade');
+                ->references("id")
+                ->on("farmers")
+                ->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

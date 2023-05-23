@@ -17,14 +17,14 @@ return new class extends Migration
             $table->float('longitude');
             $table->unsignedBigInteger('farm_id');
             $table->foreign("farm_id")
-            ->references("id")
-            ->on("farms")
-            ->onDelete('cascade');
+                ->references("id")
+                ->on("farms")
+                ->onDelete('cascade');
             $table->unsignedBigInteger('drone_id');
             $table->foreign("drone_id")
-            ->references("id")
-            ->on("drones")
-            ->onDelete('cascade');
+                ->references("id")
+                ->on("drones")
+                ->onDelete('cascade');
             $table->string('image');
             $table->rememberToken();
             $table->timestamps();
