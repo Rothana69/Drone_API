@@ -43,14 +43,21 @@ class AuthenticationController extends Controller
         // dd(Auth::attempt($credentials));
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            // dd($user->createToken('API Token')->plainTextToken);
-            $token = $user->createToken('API Token')->plainTextToken;
+            $ID =  $user->role_id;
+            $value = Roles::find($ID);
+
+            if ($value['name'] === 'admin') {
+                $token = $user->createToken('ADMIN-TOKEN', ['select', 'create', 'update', 'delete']);
+            } 
+            else {
+                $token = $user->createToken("USER-TOKEN", ['select']);
+            }
             return response()->json([
                 'user' => $user,
                 'token' => $token
             ]);
         }
-        return response()->json(['message' => 'Invalid credentials'], 401);
+        // return response()->json(['message' => 'Invalid credentials'], 401);
     }
     public function logout(Request $request){
         $request->user()->tokens()->delete();
