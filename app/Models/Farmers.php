@@ -1,21 +1,15 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class Farmers extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-
-// class User extends Model
-// {
-//     use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory;
     protected $fillable = [
         'name',
         'email',

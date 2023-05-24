@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('size');
-            $table->unsignedBigInteger('farmer_id');
-            $table->foreign("farmer_id")
+            $table->unsignedBigInteger('user_id');
+            $table->foreign("user_id")
             ->references("id")
-            ->on("farmers")
+            ->on("users")
             ->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
