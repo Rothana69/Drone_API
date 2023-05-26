@@ -41,6 +41,7 @@ class DroneController extends Controller
         if (Auth::User()->Role->name === 'admin' || Auth::User()->Role->name === 'customer') {
             $drone = Drone::create([
                 'name' => request('name'),
+                'status' => request('status'),
                 'type' => request('type'),
                 'battery_life' => request('battery_life'),
                 'weight' => request('weight'),
