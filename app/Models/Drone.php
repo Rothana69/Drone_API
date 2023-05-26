@@ -12,6 +12,7 @@ class Drone extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'status',
         'type',
         'battery_life',
         'weight',

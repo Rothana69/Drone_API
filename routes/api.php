@@ -32,6 +32,6 @@ Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware(
 
 
 
-Route::post('/drone', [DroneController::class, 'store']);
+Route::post('/drone', [DroneController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/drones', [DroneController::class, 'index']);
 Route::get('/drone/{name}', [DroneController::class, 'show']);

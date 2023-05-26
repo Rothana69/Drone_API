@@ -9,6 +9,7 @@ use App\Models\Drone;
 use App\Models\Roles;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 
 class DroneController extends Controller
@@ -35,10 +36,11 @@ class DroneController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(DroneRequest $request)
     {
         //
-        if (Auth::User()->Role->name === 'admin' || Auth::User()->Role->name === 'customer') {
+        if (Auth::User()->Role->name === 'admin') {
+            
             $drone = Drone::create([
                 'name' => request('name'),
                 'type' => request('type'),
@@ -81,6 +83,7 @@ class DroneController extends Controller
     public function update(Request $request, string $id)
     {
         //
+
     }
 
     /**
