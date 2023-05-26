@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\FarmerController;
+// use App\Http\Controllers\DroneController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\DroneController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,3 +32,6 @@ Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware(
 
 
 
+Route::post('/drone', [DroneController::class, 'store']);
+Route::get('/drones', [DroneController::class, 'index']);
+Route::get('/drone/{name}', [DroneController::class, 'show']);
