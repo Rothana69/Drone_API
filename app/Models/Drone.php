@@ -24,30 +24,28 @@ class Drone extends Model
         'plan_id'
     ];
 
+    // public static function store($reques, $id = null)
+    // {
+    //     $drone = $reques->only([
+    //         'name',
+    //         'status',
+    //         'type',
+    //         'battery_life',
+    //         'weight',
+    //         'payload',
+    //         'max_speed',
+    //         'max_altitude',
+    //     ]);
 
-    public static function store($reques, $id = null)
+    //     $drone['user_id'] = Auth::user()->id;
+
+    //     $drone = self::updateOrCreate(['id' => $id], $drone);
+
+    //     return $drone;
+    // }
+    public function instraction(): HasMany
     {
-        $drone = $reques->only([
-            'name',
-            'status',
-            'type',
-            'battery_life',
-            'weight',
-            'payload',
-            'max_speed',
-            'max_altitude',
-        ]);
-
-        $drone['user_id'] = Auth::user()->id;
-
-        $drone = self::updateOrCreate(['id' => $id], $drone);
-
-        return $drone;
-    }
-
-    public function plan(): BelongsTo
-    {
-        return $this->belongsTo(Plan::class);
+        return $this->hasMany(Instruction::class);
     }
     public function user(): BelongsTo
     {

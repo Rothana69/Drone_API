@@ -4,6 +4,7 @@
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\DroneController;
+use App\Http\Controllers\InstructionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,3 +36,10 @@ Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware(
 Route::post('/drone', [DroneController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/drones', [DroneController::class, 'index']);
 Route::get('/drone/{name}', [DroneController::class, 'show']);
+
+
+Route::get('/runModeDrones/{id}',[DroneController::class, 'runModeDrones']);
+Route::post('/instraction',[InstructionController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/instractions',[InstructionController::class, 'index']);
+Route::get('/instraction',[InstructionController::class, 'update']);
+Route::post('/instractions',[InstructionController::class, 'store'])->middleware('auth:sanctum');
