@@ -43,6 +43,7 @@ class DroneController extends Controller
             
             $drone = Drone::create([
                 'name' => request('name'),
+                'status' => request('status'),
                 'type' => request('type'),
                 'battery_life' => request('battery_life'),
                 'weight' => request('weight'),

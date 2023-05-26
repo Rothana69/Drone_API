@@ -21,6 +21,11 @@ return new class extends Migration
             ->references("id")
             ->on("users")
             ->onDelete('cascade');
+            $table->unsignedBigInteger('province_id');
+            $table->foreign("province_id")
+            ->references("id")
+            ->on("provinces")
+            ->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

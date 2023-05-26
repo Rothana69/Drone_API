@@ -5,21 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Laravel\Sanctum\HasApiTokens;
 
-class Farmers extends Model
+class Province extends Model
 {
-    use HasApiTokens, HasFactory;
+    use HasFactory;
     protected $fillable = [
         'name',
-        'email',
-        'role_id',
-        'password',
     ];
-
-    public function role(): BelongsTo
+    public function farm(): BelongsTo
     {
-        return $this->belongsTo(Roles::class);
+        return $this->belongsTo(farm::class);
     }
-    
+
 }

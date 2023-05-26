@@ -57,7 +57,7 @@ class AuthenticationController extends Controller
                 'token' => $token
             ]);
         }
-        // return response()->json(['message' => 'Invalid credentials'], 401);
+        return response()->json(['message' => 'Invalid credentials'], 401);
     }
     public function logout(Request $request){
         $request->user()->tokens()->delete();
