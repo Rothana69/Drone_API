@@ -15,9 +15,12 @@ class InstructionController extends Controller
      */
     public function index()
     {
-
-        $instrac = Instruction::all();
-        return response()->json(['success' => true, 'data' =>$instrac], 201);
+        if (Auth::User()->Role->name === 'admin') {
+            $instrac = Instruction::all();
+        } else {
+            return response()->json(['message' => 'No Permission to get plan'], 403);
+        }
+        return response()->json(['message' => 'Request successful', 'data' => $instrac], 201);
     }
 
     /**

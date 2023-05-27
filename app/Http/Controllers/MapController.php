@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\FarmResource;
-use App\Http\Resources\MapResource;
 use App\Models\Farm;
 use App\Models\Map;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class MapController extends Controller
 {
@@ -85,9 +86,41 @@ class MapController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function createMapOfFarm(Request $request, $province, $id)
     {
-        //
+        if (Auth::User()->Role->name === 'admin') {
+            $maps = Map::all();
+            $bb = null;
+            for ($i = 0; $i < count($maps); $i++) {
+                if ($maps[$i]->farm_id == $id) {
+                    $farms = Farm::find($id);
+                    $bb = new FarmResource($farms);
+                    $ID =   $bb['province_id'];
+                    $provinceGet = Province::find($ID);
+                    $name = $provinceGet->name;
+
+                    if ($name == $province) {
+                        $validator = validator::make($request->all(), [
+                            'drone_id' => "required",
+                            'image' => "required",
+                        ]);
+                        if ($validator->fails()) {
+                            return $validator->errors();
+                        } else {
+                            $map = Map::create([
+                                'drone_id' => request('drone_id'),
+                                'farm_id' => $id,
+                                'image' => request('image'),
+                            ]);
+                        }
+                        return response()->json(['message' => "Map has been created", 'data' => $maps], 201);
+                    }
+                }
+            }
+        } else {
+            return response()->json(['message' => 'No Permission to create map'], 403);
+        }
+        return response()->json(['message' => 'Farm not found'], 404);
     }
 
     /**

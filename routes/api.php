@@ -26,10 +26,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+
+
+    
 });
 
-Route::resource('/users',UserController::class);
-Route::resource('/roles',RoleController::class);
+Route::resource('/users',UserController::class)->middleware('auth:sanctum');
+Route::resource('/roles',RoleController::class)->middleware('auth:sanctum');
 Route::post('/register', [AuthenticationController::class, 'register']);
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:sanctum');
@@ -45,14 +48,16 @@ Route::get('/drone/{name}/location',[DroneController::class, 'ShowCurrent'])->mi
 
 Route::resource('/maps',MapController::class);
 Route::get('/getMapOfFarm/{province}/{id}',[MapController::class,"getMapOfFarm"]);
+
 Route::delete('/deleteMapOfFarm/{province}/{id}',[MapController::class,"deleteMapOfFarm"])->middleware('auth:sanctum');
 
-Route::post('/plan', [PlanController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/createMapOfFarm/{province}/{id}',[MapController::class,"createMapOfFarm"])->middleware('auth:sanctum');
 
-Route::put('/runModeDrones/{id}',[InstructionController::class, 'runModeDrones'])->middleware('auth:sanctum');
+Route::resource('/plans', PlanController::class)->middleware('auth:sanctum');
+Route::get('/getPlaneByname/{name}', [PlanController::class, 'getPlaneByname']);
+
+Route::get('/instractions',[InstructionController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/instraction',[InstructionController::class, 'store'])->middleware('auth:sanctum');
-Route::get('/instractions',[InstructionController::class, 'index']);
-Route::put('/instraction',[InstructionController::class, 'update']);
-Route::post('/instractions',[InstructionController::class, 'store'])->middleware('auth:sanctum');
+Route::put('/runModeDrones/{id}',[InstructionController::class, 'runModeDrones'])->middleware('auth:sanctum');
 
-Route::post('/location',[LocationController::class, 'store']);
+Route::post('/location',[LocationController::class, 'store'])->middleware('auth:sanctum');

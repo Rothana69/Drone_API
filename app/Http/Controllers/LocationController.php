@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Drone;
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LocationController extends Controller
 {
@@ -22,7 +23,7 @@ class LocationController extends Controller
     public function create()
     {
         //
-        
+
     }
 
     /**
@@ -31,13 +32,17 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         //
-        $location = Location::create([
-            'latitude'=>request('latitude'),
-            'longitude'=>request('longitude'),
-            'farm_id'=>request('farm_id'),
-            'drone_id'=>request('drone_id'),
-        ]);
-        return response()->json(['message' =>'set location successfully' , 'data' => $location],201);
+        if (Auth::User()->Role->name === 'admin') {
+            $location = Location::create([
+                'latitude' => request('latitude'),
+                'longitude' => request('longitude'),
+                'farm_id' => request('farm_id'),
+                'drone_id' => request('drone_id'),
+            ]);
+        } else {
+            return response()->json(['message' => 'No Permission to create location'], 403);
+        }
+        return response()->json(['message' => 'set location successfully', 'data' => $location], 201);
     }
 
     /**

@@ -28,8 +28,13 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Roles::class);
     }
-    public function drone():HasMany{
+    public function drone():HasMany
+    {
         return $this->hasMany(Drone::class);
+    }
+    public function plan():HasMany
+    {
+        return $this->hasMany(Plan::class);
     }
     
 }

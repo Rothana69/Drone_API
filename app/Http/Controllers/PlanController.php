@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PlanResource;
 use App\Models\Plan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,6 +51,19 @@ class PlanController extends Controller
             return response()->json(['message' => 'No Permission to create ma'], 403);
         }
         return response()->json(['message' => "Plan has been created", 'data' => $plan], 201);
+    }
+
+    public function getPlaneByname($name){
+        $plans = Plan::all();
+        foreach ($plans as $plan){
+            if ($plan->name ==$name){
+                return (new PlanResource($plan));
+            }
+        }
+        return "not found this plane name";
+        
+        // return response()->json(['message' => "Create Successfully", 'data' => $plans], 200);
+
     }
 
     /**
