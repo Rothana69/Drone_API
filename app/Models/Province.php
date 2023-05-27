@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Province extends Model
 {
@@ -12,9 +13,9 @@ class Province extends Model
     protected $fillable = [
         'name',
     ];
-    public function farm(): BelongsTo
+    public function farm(): HasMany
     {
-        return $this->belongsTo(farm::class);
+        return $this->hasMany(farm::class);
     }
 
 }

@@ -23,9 +23,9 @@ class Farm extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function province(): HasMany
+    public function province(): BelongsTo
     {
-        return $this->hasMany(Province::class);
+        return $this->belongsTo(Province::class);
     }
     public function location(): HasMany
     {

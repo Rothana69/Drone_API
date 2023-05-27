@@ -12,7 +12,12 @@ class PlanController extends Controller
      */
     public function index()
     {
-        //
+        $plans = Plan::all();
+        if (count($plans) == 0) {
+            return response()->json(['message' => 'request successful'], 200);
+        } else {
+            return response()->json(['message' => 'request successful', 'data' => $plans], 200);
+        }
     }
 
     /**
@@ -28,7 +33,14 @@ class PlanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $plan = Plan::create([
+            'name' => request('name'),
+            'date_time' => request('date_time'),
+            'area' => request('area'),
+            'altitude' => request('altitude'),
+            'user_id' => request('user_id'),
+        ]);
+        return response()->json(['message' => "Create Successfully", 'data' => $plan], 201);
     }
 
     /**

@@ -9,7 +9,7 @@ class Plan extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'type',
+        'name',
         'date_time',
         'area',
         'altitude',

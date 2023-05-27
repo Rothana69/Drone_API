@@ -38,6 +38,7 @@ class Drone extends Model
             'max_altitude',
         ]);
 
+
         $drone['user_id'] = Auth::user()->id;
 
         $drone = self::updateOrCreate(['id' => $id], $drone);
