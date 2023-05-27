@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Plan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PlanController extends Controller
 {
@@ -12,11 +13,15 @@ class PlanController extends Controller
      */
     public function index()
     {
-        $plans = Plan::all();
-        if (count($plans) == 0) {
-            return response()->json(['message' => 'request successful'], 200);
+        if (Auth::User()->Role->name === 'admin') {
+            $plans = Plan::all();
+            if (count($plans) == 0) {
+                return response()->json(['message' => 'request successful'], 200);
+            } else {
+                return response()->json(['message' => 'request successful', 'data' => $plans], 200);
+            }
         } else {
-            return response()->json(['message' => 'request successful', 'data' => $plans], 200);
+            return response()->json(['message' => 'No Permission to create ma'], 403);
         }
     }
 
@@ -33,14 +38,18 @@ class PlanController extends Controller
      */
     public function store(Request $request)
     {
-        $plan = Plan::create([
-            'name' => request('name'),
-            'date_time' => request('date_time'),
-            'area' => request('area'),
-            'altitude' => request('altitude'),
-            'user_id' => request('user_id'),
-        ]);
-        return response()->json(['message' => "Create Successfully", 'data' => $plan], 201);
+        if (Auth::User()->Role->name === 'admin') {
+            $plan = Plan::create([
+                'name' => request('name'),
+                'date_time' => request('date_time'),
+                'area' => request('area'),
+                'altitude' => request('altitude'),
+                'user_id' => request('user_id'),
+            ]);
+        } else {
+            return response()->json(['message' => 'No Permission to create ma'], 403);
+        }
+        return response()->json(['message' => "Plan has been created", 'data' => $plan], 201);
     }
 
     /**

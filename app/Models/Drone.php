@@ -13,7 +13,6 @@ class Drone extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'status',
         'type',
         'battery_life',
         'weight',
@@ -28,7 +27,6 @@ class Drone extends Model
     {
         $drone = $reques->only([
             'name',
-            'status',
             'type',
             'battery_life',
             'weight',
@@ -43,6 +41,10 @@ class Drone extends Model
 
         return $drone;
     }
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 
     public function plan(): BelongsTo
     {
@@ -55,5 +57,9 @@ class Drone extends Model
     public function map(): HasMany
     {
         return $this->hasMany(Map::class);
+    }
+    public function location(): HasMany
+    {
+        return $this->hasMany(Location::class);
     }
 }

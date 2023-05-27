@@ -8,6 +8,7 @@ use App\Models\Farm;
 use App\Models\Map;
 use App\Models\Province;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MapController extends Controller
@@ -18,10 +19,10 @@ class MapController extends Controller
     public function index()
     {
         $maps = Map::all();
-        if (count($maps)==0){
+        if (count($maps) == 0) {
             return response()->json(['message' => "request succesfully"], 200);
-        }else{
-            return response()->json(['message' => "request succesfully" ,'data'=>$maps], 200);
+        } else {
+            return response()->json(['message' => "request succesfully", 'data' => $maps], 200);
         }
     }
 
@@ -29,42 +30,50 @@ class MapController extends Controller
     {
         $image = [];
         $maps = Map::all();
-        $bb=null;
+        $bb = null;
 
-        foreach ($maps as $map){
-            if ($map->farm_id==$id){
+        foreach ($maps as $map) {
+            if ($map->farm_id == $id) {
                 $farms = Farm::find($id);
                 $bb = new FarmResource($farms);
                 $ID =   $bb['province_id'];
                 $provinceGet = Province::find($ID);
                 $name = $provinceGet->name;
-                if ($name==$province){
-                    array_push($image,$map->image);
+                if ($name == $province) {
+                    array_push($image, $map->image);
                 }
             }
         }
-        return $image;
+
+        if ($image == null) {
+            return response()->json(['message' => "Image not found"], 404);
+        }
+        return response()->json(['message' => "Request image successful", 'data ' => $image], 201);
     }
-    public function deleteMapOfFarm( $province, $id)
+    public function deleteMapOfFarm($province, $id)
     {
-        $maps = Map::all();
-        $bb=null;
-        for ($i = 0; $i < count($maps); $i++) {
-            if ($maps[$i]->farm_id==$id){
-                $farms = Farm::find($id);
-                $bb = new FarmResource($farms);
-                $ID =   $bb['province_id'];
-                $provinceGet = Province::find($ID);
-                $name = $provinceGet->name;
-                // return $name.$province;
-                if ($name==$province){
-                    $maps[$i]->delete();
-                    // DB::table('users')->where('id', $i+1)->delete();
+        if (Auth::User()->Role->name === 'admin') {
+            $maps = Map::all();
+            $bb = null;
+            for ($i = 0; $i < count($maps); $i++) {
+                if ($maps[$i]->farm_id == $id) {
+                    $farms = Farm::find($id);
+                    $bb = new FarmResource($farms);
+                    $ID =   $bb['province_id'];
+                    $provinceGet = Province::find($ID);
+                    $name = $provinceGet->name;
+                    // return $name.$province;
+                    if ($name == $province) {
+                        $maps[$i]->delete();
+                    }
                 }
-            }
-            return $maps;
+            };
+        } else {
+            return response()->json(['message' => 'No Permission to delete image'], 202);
         }
+        return response()->json(['message' => 'Delete successful'], 201);
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -112,7 +121,4 @@ class MapController extends Controller
     {
         //
     }
-
-
-
 }

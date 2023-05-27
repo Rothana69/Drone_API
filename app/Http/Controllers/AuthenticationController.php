@@ -53,8 +53,10 @@ class AuthenticationController extends Controller
                 $token = $user->createToken("USER-TOKEN", ['select']);
             }
             return response()->json([
+                'message' =>'Login successful',
                 'user' => $user,
                 'token' => $token
+
             ]);
         }
         return response()->json(['message' => 'Invalid credentials'], 401);

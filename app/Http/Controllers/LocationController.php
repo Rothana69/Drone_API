@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Drone;
 use App\Models\Location;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,7 @@ class LocationController extends Controller
     public function create()
     {
         //
+        
     }
 
     /**
@@ -29,6 +31,13 @@ class LocationController extends Controller
     public function store(Request $request)
     {
         //
+        $location = Location::create([
+            'latitude'=>request('latitude'),
+            'longitude'=>request('longitude'),
+            'farm_id'=>request('farm_id'),
+            'drone_id'=>request('drone_id'),
+        ]);
+        return response()->json(['message' =>'set location successfully' , 'data' => $location],201);
     }
 
     /**
@@ -37,6 +46,7 @@ class LocationController extends Controller
     public function show(Location $location)
     {
         //
+
     }
 
     /**

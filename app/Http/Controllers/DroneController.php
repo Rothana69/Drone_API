@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DroneRequest;
+use App\Http\Requests\DroneUpdateRequest;
 use App\Http\Requests\InstractionRequest;
 use App\Http\Resources\DroneResource;
+use App\Http\Resources\DroneUpdateResource;
 use App\Http\Resources\InstractionResource;
+use App\Http\Resources\LocationResource;
 use Illuminate\Http\Request;
 use App\Models\Drone;
 use App\Models\Instruction;
@@ -14,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Console\Input\Input;
+use App\Models\Location;
+use Illuminate\Database\Eloquent\Collection;
 
 class DroneController extends Controller
 {
@@ -25,7 +30,7 @@ class DroneController extends Controller
         //
         $drone = Drone::all();
         $drone = DroneResource::collection($drone);
-        return response()->json(['success' => true, 'data' => $drone], 200);
+        return response()->json(['message' => 'Request successful', 'data' => $drone], 200);
     }
 
     /**
@@ -43,7 +48,6 @@ class DroneController extends Controller
     {
         //
         if (Auth::User()->Role->name === 'admin') {
-
             $drone = Drone::create([
                 'name' => request('name'),
                 'type' => request('type'),
@@ -56,9 +60,9 @@ class DroneController extends Controller
                 'plan_id' => request('plan_id'),
             ]);
         } else {
-            return response()->json(['message' => 'No Permission to create Drones'], 403);
+            return response()->json(['message' => 'No Permission to add Drone'], 403);
         }
-        return response()->json(['success' => true, 'data' => $drone], 201);
+        return response()->json(['message' => 'Drone has been added', 'data' => $drone], 201);
     }
 
     /**
@@ -83,10 +87,21 @@ class DroneController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(DroneUpdateRequest $request, string $name)
     {
         //
-
+        if (Auth::User()->Role->name === 'admin') {
+            $drone = Drone::where('name', $name)
+                ->update([
+                    'battery_life' => request('battery_life'),
+                    'weight' => request('weight'),
+                    'payload' => request('payload'),
+                    'max_altitude' => request('max_altitude'),
+                ]);
+        } else {
+            return response()->json(['message' => 'No Permission to update Drone'], 403);
+        }
+        return response()->json(['message' => 'Drone has been updated', 'data' => new DroneUpdateResource(Drone::find($drone))], 200);
     }
 
     /**
@@ -97,15 +112,18 @@ class DroneController extends Controller
         //
     }
 
-    public function runModeDrones(Request $request ,string $id)
+
+
+    public function ShowCurrent(string $name)
     {
-        $drone = Instruction::find($id);
-        if($drone == null){
-            return response()->json(['message'=>'request not found'], 404);
+        if (Auth::User()->Role->name === 'admin' || Auth::User()->Role->name === 'user') {
+
+            $drone = Drone::where('name', '=', $name)->get()->first()->value('id');
+            $location = Location::where('drone_id', '=', $drone)->get()->first();
+            $location = new LocationResource($location);
+        } else {
+            return response()->json(['message' => 'No Permission to show current location of drone'], 403);
         }
-        $drone->update([
-            'status' => 'running',
-        ]);
-        return response()->json(['success' => true, 'data' => new InstractionResource($drone)], 200);
+        return response()->json(['message' => "Request successful", 'data' => $location], 200);;
     }
 }

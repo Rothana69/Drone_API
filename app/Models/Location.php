@@ -16,7 +16,10 @@ class Location extends Model
         'drone_id',
     ];
 
-
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
     public function farm(): BelongsTo
     {
         return $this->belongsTo(Farm::class);

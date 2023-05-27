@@ -13,6 +13,10 @@ class Province extends Model
     protected $fillable = [
         'name',
     ];
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
     public function farm(): HasMany
     {
         return $this->hasMany(farm::class);

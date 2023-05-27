@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\InstractionResource;
 use App\Models\Instruction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +15,9 @@ class InstructionController extends Controller
      */
     public function index()
     {
-        //
+
         $instrac = Instruction::all();
-        return response()->json(['success' => true, 'data' => $instrac], 201);
+        return response()->json(['success' => true, 'data' =>$instrac], 201);
     }
 
     /**
@@ -34,17 +35,35 @@ class InstructionController extends Controller
     {
         //
         if (Auth::User()->Role->name === 'admin') {
-        $instrac = Instruction::create([
-            'status' => request('status'),
-            'drone_id' => request('drone_id'),
-            'plan_id' => request('plan_id')
-        ]);
+            $instrac = Instruction::create([
+                'status' => request('status'),
+                'drone_id' => request('drone_id'),
+                'plan_id' => request('plan_id')
+            ]);
         } else {
             return response()->json(['message' => 'No Permission to create instraction'], 403);
         }
-        return response()->json(['success' => true, 'data' => $instrac], 201);
+        return response()->json(['message' => 'Instraction has been created', 'data' => $instrac], 201);
     }
 
+
+
+    public function runModeDrones(Request $request, string $id)
+    {
+        if (Auth::User()->Role->name === 'admin') {
+            $drone = Instruction::find($id);
+            if ($drone == null) {
+                return response()->json(['message' => 'request not found'], 404);
+            }
+            $drone->update([
+                'status' => request('status'),
+            ]);
+        } else {
+            return response()->json(['message' => 'No Permission to update status Drones'], 403);
+        }
+        // return "fghj";
+        return response()->json(['message' => 'Status has been updated', 'data' => new InstractionResource($drone)], 200);
+    }
     /**
      * Display the specified resource.
      */
@@ -67,7 +86,7 @@ class InstructionController extends Controller
     public function update(Request $request, Instruction $instruction)
     {
         //
-        
+
     }
 
     /**

@@ -7,7 +7,9 @@ use App\Http\Controllers\DroneController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\InstructionController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\UserController;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,16 +39,20 @@ Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware(
 
 Route::post('/drone', [DroneController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/drones', [DroneController::class, 'index']);
+Route::put('/drone/{name}', [DroneController::class, 'update'])->middleware('auth:sanctum');
 Route::get('/drone/{name}', [DroneController::class, 'show']);
+Route::get('/drone/{name}/location',[DroneController::class, 'ShowCurrent'])->middleware('auth:sanctum');
 
 Route::resource('/maps',MapController::class);
 Route::get('/getMapOfFarm/{province}/{id}',[MapController::class,"getMapOfFarm"]);
-Route::delete('/deleteMapOfFarm/{province}/{id}',[MapController::class,"deleteMapOfFarm"]);
+Route::delete('/deleteMapOfFarm/{province}/{id}',[MapController::class,"deleteMapOfFarm"])->middleware('auth:sanctum');
 
-Route::post('/plan', [PlanController::class, 'store']);
+Route::post('/plan', [PlanController::class, 'store'])->middleware('auth:sanctum');
 
-Route::get('/runModeDrones/{id}',[DroneController::class, 'runModeDrones']);
+Route::put('/runModeDrones/{id}',[InstructionController::class, 'runModeDrones'])->middleware('auth:sanctum');
 Route::post('/instraction',[InstructionController::class, 'store'])->middleware('auth:sanctum');
 Route::get('/instractions',[InstructionController::class, 'index']);
-Route::get('/instraction',[InstructionController::class, 'update']);
+Route::put('/instraction',[InstructionController::class, 'update']);
 Route::post('/instractions',[InstructionController::class, 'store'])->middleware('auth:sanctum');
+
+Route::post('/location',[LocationController::class, 'store']);
