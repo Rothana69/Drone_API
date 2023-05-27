@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('drones', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('status')->default(false);
             $table->string('type');
             $table->string('battery_life');
             $table->float('weight');

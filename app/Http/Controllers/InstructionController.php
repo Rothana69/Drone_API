@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Instruction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class InstructionController extends Controller
 {
@@ -13,6 +15,8 @@ class InstructionController extends Controller
     public function index()
     {
         //
+        $instrac = Instruction::all();
+        return response()->json(['success' => true, 'data' => $instrac], 201);
     }
 
     /**
@@ -29,6 +33,16 @@ class InstructionController extends Controller
     public function store(Request $request)
     {
         //
+        if (Auth::User()->Role->name === 'admin') {
+        $instrac = Instruction::create([
+            'status' => request('status'),
+            'drone_id' => request('drone_id'),
+            'plan_id' => request('plan_id')
+        ]);
+        } else {
+            return response()->json(['message' => 'No Permission to create instraction'], 403);
+        }
+        return response()->json(['success' => true, 'data' => $instrac], 201);
     }
 
     /**
@@ -53,6 +67,7 @@ class InstructionController extends Controller
     public function update(Request $request, Instruction $instruction)
     {
         //
+        
     }
 
     /**

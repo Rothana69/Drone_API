@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\DroneRequest;
+use App\Http\Requests\InstractionRequest;
 use App\Http\Resources\DroneResource;
+use App\Http\Resources\InstractionResource;
 use Illuminate\Http\Request;
 use App\Models\Drone;
+use App\Models\Instruction;
 use App\Models\Roles;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
-
+use Symfony\Component\Console\Input\Input;
 
 class DroneController extends Controller
 {
@@ -40,10 +43,9 @@ class DroneController extends Controller
     {
         //
         if (Auth::User()->Role->name === 'admin') {
-            
+
             $drone = Drone::create([
                 'name' => request('name'),
-                'status' => request('status'),
                 'type' => request('type'),
                 'battery_life' => request('battery_life'),
                 'weight' => request('weight'),
@@ -93,5 +95,17 @@ class DroneController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function runModeDrones(Request $request ,string $id)
+    {
+        $drone = Instruction::find($id);
+        if($drone == null){
+            return response()->json(['message'=>'request not found'], 404);
+        }
+        $drone->update([
+            'status' => 'running',
+        ]);
+        return response()->json(['success' => true, 'data' => new InstractionResource($drone)], 200);
     }
 }

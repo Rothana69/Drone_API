@@ -24,7 +24,6 @@ class Drone extends Model
         'plan_id'
     ];
 
-
     public static function store($reques, $id = null)
     {
         $drone = $reques->only([
@@ -37,7 +36,6 @@ class Drone extends Model
             'max_speed',
             'max_altitude',
         ]);
-
 
         $drone['user_id'] = Auth::user()->id;
 

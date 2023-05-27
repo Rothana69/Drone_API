@@ -5,10 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
 
-
-class DroneRequest extends FormRequest
+class InstractionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,17 +28,7 @@ class DroneRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=> 'required|unique:drones',
-            'status'=> 'required|boolean',
-            'type'=> 'required',
-            'battery_life'=>'required|integer|',
-            'weight'=>'required',
-            'payload'=>'required',
-            'max_speed' => 'required',
-            'max_altitude'=>'required',
-            'user_id'=>'required',
-            'plan_id' => 'required',
-            Rule::unique('drones')->ignore($this->id),
+            'status' => 'required|min:3'
         ];
     }
 }
