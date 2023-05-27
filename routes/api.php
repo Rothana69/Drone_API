@@ -24,10 +24,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+
+
+    
 });
 
-Route::resource('/users',UserController::class);
-Route::resource('/roles',RoleController::class);
+Route::resource('/users',UserController::class)->middleware('auth:sanctum');
+Route::resource('/roles',RoleController::class)->middleware('auth:sanctum');
 Route::post('/register', [AuthenticationController::class, 'register']);
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:sanctum');
@@ -42,8 +45,10 @@ Route::get('/drone/{name}', [DroneController::class, 'show']);
 Route::resource('/maps',MapController::class);
 Route::get('/getMapOfFarm/{province}/{id}',[MapController::class,"getMapOfFarm"]);
 Route::delete('/deleteMapOfFarm/{province}/{id}',[MapController::class,"deleteMapOfFarm"]);
+Route::post('/createMapOfFarm/{province}/{id}',[MapController::class,"createMapOfFarm"]);
 
-Route::post('/plan', [PlanController::class, 'store']);
+Route::resource('/plans', PlanController::class);
+Route::get('/getPlaneByname/{name}', [PlanController::class, 'getPlaneByname']);
 
 Route::get('/runModeDrones/{id}',[DroneController::class, 'runModeDrones']);
 Route::post('/instraction',[InstructionController::class, 'store'])->middleware('auth:sanctum');

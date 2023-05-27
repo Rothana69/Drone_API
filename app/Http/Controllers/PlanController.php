@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PlanResource;
 use App\Models\Plan;
 use Illuminate\Http\Request;
 
@@ -41,6 +42,19 @@ class PlanController extends Controller
             'user_id' => request('user_id'),
         ]);
         return response()->json(['message' => "Create Successfully", 'data' => $plan], 201);
+    }
+
+    public function getPlaneByname($name){
+        $plans = Plan::all();
+        foreach ($plans as $plan){
+            if ($plan->name ==$name){
+                return (new PlanResource($plan));
+            }
+        }
+        return "not found this plane name";
+        
+        // return response()->json(['message' => "Create Successfully", 'data' => $plans], 200);
+
     }
 
     /**
